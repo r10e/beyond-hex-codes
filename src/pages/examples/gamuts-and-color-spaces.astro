@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import ColorBlock from '../../components/ColorBlock.vue';
+
+export const title = 'Gamuts, Perceived Colours and Colour Spaces';
+export const number = '06';
+export const abstract = `All previous colour definitions define colours in one colour space only.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			We've so far only seen different ways to define colours within the
+			<a href="https://en.wikipedia.org/wiki/SRGB">sRGB colour space</a>.
+		</p>
+		<p>
+			While that is the web's standard colour space, it has limitations in
+			regards of the visible <em>gamut</em>:
+		</p>
+		<figure>
+			<img
+				src="https://upload.wikimedia.org/wikipedia/commons/6/60/Cie_Chart_with_sRGB_gamut_by_spigget.png"
+			/>
+			<figcaption>
+				The original uploader was Dicklyon at English Wikipedia., CC BY-SA 3.0,
+				via Wikimedia Commons
+			</figcaption>
+		</figure>
+		<p>
+			(Note that the picture above is clamps colours to the sRGB colour space.)
+		</p>
+		<div style="height: 18vh;"></div>
+		<p>
+			Our perception of colors changes based on device and on light; e.g. Star
+			Trek uniforms and <a href="https://en.wikipedia.org/wiki/The_dress"
+				>The Dress</a
+			>:
+		</p>
+		<figure>
+			<img
+				src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Wikipe-tan_wearing_The_Dress_reduced.svg"
+			/><figcaption>
+				Figure design by Kasuga~jawiki; vectorization by Editor at Large; "The
+				dress" modification by Jahobr
+			</figcaption>
+		</figure>
+		<div style="height: 18vh;"></div>
+		<p>
+			Moreover, HSL is not <em>perceptually uniform</em> in regards of lightness.
+			As an example, these colours should be similarly light but aren't perceived
+			as such; compare how they contract the white box and background:
+		</p>
+		<ColorShowcase colors={['hsl(60 100% 50%)', 'hsl(240 100% 50%)']} />
+	</main>
+</Layout>

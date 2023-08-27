@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'A Note on Opacity';
+export const number = '05';
+export const abstract = `Opacity is built-in into all color schemes.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			All colours can be defined with an <em>opacity</em> value, which defines how,
+			well, opaque it is. That is, it can be basically invisible, see-through or
+			solid, depending on the value. The default for all colours is fully opaque.
+		</p>
+		<p>
+			Hex codes take another hex value with <code>00</code> corresponding to <code
+				>0%</code
+			> opacity up to <code>ff</code> being equal to full opacity.
+		</p>
+		<ColorShowcase
+			backgroundColor="hotpink"
+			client:visible
+			colors={['#ffffff00', '#ffffffcc', '#ffffffff']}
+		/>
+		<p>
+			RGB works similarly, but most other color syntaxes require a slash in
+			front of either a percentage or a decimal between <code>0</code> and
+			<code>1</code>:
+		</p>
+		<ColorShowcase
+			backgroundColor="hsl(217, 7%, 66%)"
+			client:visible
+			colors={[
+				'hsl(205, 94%, 33% / 0)',
+				'hwb(205 2% 36% / .25)',
+				'lab(39.282% -3.262 -34.435 / 50%)',
+				'lch(39.4% 43.21 264.45 / 75%)',
+				'rgb(21.98, 95.72, 160.52, 1)',
+			]}
+		/>
+	</main>
+</Layout>
+
+<style>
+	.showcase {
+		background-color: hotpink;
+	}
+</style>

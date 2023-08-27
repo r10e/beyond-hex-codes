@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const examples = await Astro.glob('./examples/*.{astro,vue}');
+---
+
+<aside>Ruben Straube, 16 &#8555; 2020, Unterf&ouml;hring</aside>
+<Layout
+	title="Beyond Hex Codes"
+	number="0"
+	abstract=""
+	previous={null}
+	next={null}
+>
+	<h2>Colours in CSS & Functions of the Future</h2>
+	<main>
+		There are many, many ways to define colours on the web, as showcased in <a
+			href="https://codepen.io/argyleink/pen/RwyOyeq"
+			>this codepen by Adam Argyle</a
+		>.
+		<p>
+			If you're like me and are really only familiar with hex codes, you'll be
+			wondering what all the other ways are.
+		</p>
+		<p>
+			This talk gives an overview over the most important ways to define a
+			colour, what functions are in the process of being added, and how this can
+			help us build awesome websites.
+		</p>
+		<ul class="posts">
+			{
+				examples
+					.sort((a, b) => a.number - b.number)
+					.map((example) => (
+						<li class="box">
+							<a href={example.url}>
+								{example.number} - {example.title}
+							</a>
+							<p>{example.abstract}</p>
+							<a href={example.url} class="learn-more">
+								Learn more &gt;
+							</a>
+						</li>
+					))
+			}
+		</ul>
+	</main>
+</Layout>
+
+<style lang="scss">
+	main {
+		max-width: 50vw;
+	}
+	.posts {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		justify-content: space-between;
+		column-gap: 3rem;
+		list-style: none;
+		margin: 3rem 0 0 0;
+		padding: 0;
+		li {
+			display: grid;
+			align-items: start;
+			grid-template-rows: subgrid;
+			grid-row: auto / span 3;
+			margin-bottom: 3rem;
+			.learn-more {
+				width: fit-content;
+			}
+		}
+	}
+</style>

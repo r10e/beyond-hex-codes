@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'Conclusion';
+export const number = '13';
+export const abstract = `What does all this mean, now?`;
+
+const examples = await Astro.glob('./*.{astro,vue}');
+const ownNumber = parseInt(number);
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			We can dynamically create whole designs using one base colour and
+			calculating the rest of the
+			<a href="https://htmlcolors.com/color-picker"
+				>colors on the colour wheel</a
+			>. <a href="https://codepen.io/argyleink/pen/ExjReJa"
+				>Here's an example by Adam Argyle, not yet using relative colours.</a
+			>
+		</p>
+		<p></p>
+		<p>
+			Two more important use cases are accessibility and device independence.
+			Since everything is a web browsing machine and everyone browses the web,
+			we should make fewer and fewer assumptions on who visits our site on what.
+		</p>
+		<p>
+			Contrast is <a href="https://dkg2023.de/planetary-futures"
+				>already being toggled in modern websites</a
+			>, but can also be read out of the OS/browser settings. The Discord app,
+			for example, also <a
+				href="https://support.discord.com/hc/en-us/articles/1500010454681-Accessibility-Settings-Tab#h_01G7DFWCRF6ZB54TWTJT911YE5"
+				>features a saturation slider in their settings</a
+			>.
+		</p>
+		<p>
+			The CIE colour space, aiming to be device-independent, also helps us look
+			the same everywhere. More importantly though, we can control how
+			contrasting colours are when viewing the page in monochrome colours, as
+			this image by Michelle Barker shows:
+		</p>
+		<figure>
+			<img
+				src="https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/4253d9b2-46d7-4b10-9e1a-b5f3ac6cea1c/5-modern-css-color.png"
+			/><figcaption>
+				Image, again, from <a
+					href="https://www.smashingmagazine.com/2021/11/guide-modern-css-colors/"
+					>Michelle Barker's excellent article</a
+				>.
+			</figcaption>
+		</figure>
+	</main>
+</Layout>
+
+<style></style>

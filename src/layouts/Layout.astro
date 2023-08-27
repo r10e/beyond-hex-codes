@@ -1,0 +1,72 @@
+---
+export interface Props {
+	number: string;
+	title: string;
+	abstract: string | null;
+	previous: { title: string; url: string } | null;
+	next: { title: string; url: string } | null;
+}
+
+const { title, abstract, previous, next } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+		<meta name="generator" content={Astro.generator} />
+	</head>
+	<body>
+		<h1>{title}</h1>
+		{
+			abstract && (
+				<a href="../../" id="back-link" class="back-link">
+					&lt; back
+				</a>
+			)
+		}
+		<slot />
+
+		<nav class="nav-links">
+			<div>
+				{
+					previous && (
+						<a href={previous.url} id="previous-link" class="previous-link">
+							&lt; Previous: {previous.title}
+						</a>
+					)
+				}
+			</div>
+			<div>
+				{
+					next && (
+						<a href={next.url} id="next-link" class="next-link">
+							{' '}
+							Next: {next.title} &gt;
+						</a>
+					)
+				}
+			</div>
+		</nav>
+		<style lang="scss" is:global>
+			@import '../styles/global.scss';
+		</style>
+		<script>
+			document.onkeydown = (key) => {
+				console.log(key.code);
+				if (key.code === 'ArrowLeft') {
+					document.getElementById('previous-link')?.click();
+				}
+				if (key.code === 'ArrowRight') {
+					document.getElementById('next-link')?.click();
+				}
+				if (key.code === 'Backspace') {
+					document.getElementById('back-link')?.click();
+				}
+			};
+		</script>
+	</body>
+</html>

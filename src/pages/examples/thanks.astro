@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import allColorsObject from '../../../node_modules/css-color-names/css-color-names.json';
+
+export const title = 'Thank You for Listening!';
+export const number = '14';
+export const abstract = `Thanks a lot! Here are my sources.`;
+
+const exampleColors = [
+	'red',
+	'green',
+	'blue',
+	'rebeccapurple',
+	'hotpink',
+	'lightgoldenrodyellow',
+	'transparent',
+	'currentcolor',
+];
+const allColors = Object.keys(allColorsObject);
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>Thank you for your time!</p>
+		<p>
+			Here are the sources I used in case you want to see for yourself how deep
+			the rabbit hole goes:
+		</p>
+		<ul>
+			<li>
+				Of course: Adam Argyle's codepen <a
+					href="https://codepen.io/argyleink/pen/RwyOyeq"
+					>CSS Color Syntax Mega List</a
+				> that started this deep dive.
+			</li>
+			<li>
+				My main source: Michelle Barker's article <a
+					href="https://www.smashingmagazine.com/2021/11/guide-modern-css-colors/"
+					>A Guide To Modern CSS Colors With RGB, HSL, HWB, LAB and LCH</a
+				>
+			</li>
+			<li>
+				<a href="https://thecsspodcast.libsyn.com/006-color-part-1-usage"
+					>Una Kravets and Adam Argyle, The CSS Podcast: Color Part 1 - Usage</a
+				>
+			</li>
+			<li>
+				<a href="https://thecsspodcast.libsyn.com/007-color-part-2-perception"
+					>Una Kravets and Adam Argyle, The CSS Podcast: Color Part 2 -
+					Perception</a
+				>
+			</li>
+			<li>
+				<a href="https://www.youtube.com/watch?v=qqbZBnLVn74"
+					>Lea Verou: The Chroma Zone, CSSConf Australia</a
+				>
+			</li>
+			<li>
+				<a
+					href="https://www.stefanjudis.com/blog/hwb-a-color-notation-for-humans/"
+					>Stefan Judis: hwb() - a color notation for humans?</a
+				>
+			</li>
+			<li>
+				<a href="https://www.stefanjudis.com/notes/new-in-css-relative-colors/"
+					>Stefan Judis: New in CSS: relative colors</a
+				>
+			</li>
+			<li><a href="https://css.land/lch/">Lea Verou's LCH Colour Picker</a></li>
+			<li>
+				Of course Wikipedia on <a href="https://en.wikipedia.org/wiki/SRGB"
+					>sRGB</a
+				>, <a href="https://en.wikipedia.org/wiki/Gamut">gamuts</a> and you take
+				it from there
+			</li>
+			<li>
+				<a href="https://www.w3.org/TR/css-color-4/">CSS Color Module Level 4</a
+				>
+			</li>
+			<li>
+				<a href="https://www.w3.org/TR/css-color-5/">CSS Color Module Level 5</a
+				>
+			</li>
+			<li>
+				<a href="https://htmlcolors.com/color-picker"
+					>HTML Colors' Color Picker</a
+				>
+			</li>
+			<li>
+				<a href="https://github.com/bahamas10/css-color-names/"
+					>css-color-names by bahamas10 on Github</a
+				>
+			</li>
+			<li>
+				<a href="https://github.com/radial-color-picker/vue-color-picker"
+					>vue-color-picker on radial-color-picker's Github</a
+				>
+			</li>
+		</ul>
+	</main>
+</Layout>
+
+<style></style>

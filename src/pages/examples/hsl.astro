@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import HSLPicker from '../../components/HSLPicker.vue';
+
+export const title = 'HSL: Hue, Saturation, Lightness';
+export const number = '03';
+export const abstract = `Colours can be semantic as well!`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			One of the weaknesses of RGB is that we don't necessarily think about
+			colours as numerical values.
+		</p>
+		<p>
+			HSL, as in Hue, Saturation and Lightness, is a way to define colours in a
+			way that is more intuitive to humans.
+		</p>
+		<p>
+			For example, the colours in this talk have been derived from TNG-Blue (in
+			the middle) and adapting the lightness, to archieve a dark and a light
+			blue, each.
+		</p>
+		<ColorShowcase
+			colors={['hsl(205, 94%, 8%)', 'hsl(205, 94%, 33%)', 'hsl(205, 94%, 58%)']}
+		/>
+		<div style="height: 18vh;"></div>
+		<p>Hue is the degree on the <em>Colour Wheel</em>, as displayed here.</p>
+		<HSLPicker client:visible />
+		<div style="height: 18vh;"></div>
+		<p>
+			Hue can take <code>deg</code>, <code>rad</code>, <code>grad</code> or <code
+				>turn</code
+			> as a dimension. Dimensionless numbers are interpreted as <code>deg</code
+			>. Comma-separation is optional, and <code>none</code> is valid at least in
+			Safari.
+		</p>
+		<ColorShowcase
+			colors={[
+				'hsl(180deg 50% 50%)',
+				'hsl(.5turn 50% 50%)',
+				'hsl(3.5turn 50% 50%)',
+				'hsl(10rad 50% 50%)',
+				'hsl(none none 100%)',
+				'hsl(100 99% none)',
+				'hsl(none 99% 0%)',
+				'hsl(100 99% 50%)',
+			]}
+		/>
+	</main>
+</Layout>

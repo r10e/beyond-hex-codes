@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'Hex Codes & RGB';
+export const number = '02';
+export const abstract = `The colour coding we all know & its human-readable analogue.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			The most classic way to define colours: Give a value for Red, Green and
+			Blue each, in hexadecimal ranging from
+			<code>0x00</code> to <code>0xFF</code>, in one string without separators.
+		</p>
+		<ColorShowcase colors={['#ff0000', '#00ff00', '#0000ff']} />
+
+		<p>
+			Using only three numbers is a shorthand for each one doubled, i.e.
+			<code>#aaa = #aaaaa</code>:
+		</p>
+
+		<ColorShowcase colors={['#000', '#ccc', '#cccccc', '#fff']} />
+		<p>
+			Since hex codes are not the numbers that normal humans think in, there's
+			also <code>RGB</code>, which takes actual decimal numbers from 0 to 255
+			each.
+		</p>
+		<ColorShowcase
+			colors={['rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)']}
+		/>
+	</main>
+</Layout>
+
+<style></style>

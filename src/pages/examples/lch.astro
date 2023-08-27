@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import ColorBlock from '../../components/ColorBlock.vue';
+
+export const title = 'The CIE Colour Space: LCH';
+export const number = '08';
+export const abstract = `Bigger gamut, perceptually uniform, and a familiar syntax.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>LCH stands for <em>Lighness</em>, <em>Chroma</em> and <em>Hue</em>.</p>
+		<p>
+			Lightness behaves similar to other lightness values that we've seen, just
+			like hue (but it's a different colour wheel).
+		</p>
+		<p>
+			Chroma, like saturation, describes <em>colourfulness</em>.
+			<a href="https://en.wikipedia.org/wiki/Colorfulness">Wikipedia says</a> that
+			chroma says how 'different from a grey of the same lightness color appears
+			to be'.
+		</p>
+		<p>Here are a few examples:</p>
+		<ColorShowcase
+			colors={[
+				'lch(50% 100 180)',
+				'lch(50% 100 0)',
+				'lch(50% 100 270)',
+				'lch(50% 100 90)',
+			]}
+		/>
+		<figure>
+			<img
+				src="https://wisotop.de/svg/lab-farbmodell-einfach.png"
+				style="transform: scale(.75);"
+			/><figcaption>
+				LCH uses the same colour wheel as LAB, but navigates via rotation like
+				HSL. Image source: <a
+					href="https://wisotop.de/lab-farbraum-cie-luv-farbraum.php"
+					>wisotop.de</a
+				>
+			</figcaption>
+		</figure>
+		<p>
+			There's also <a href="https://css.land/lch/"
+				>this helpful colour picker by Lea Verou</a
+			>, which shows conversions as well as a warning if you're out of the
+			gamut.
+		</p>
+		<div style="height: 18vh;"></div>
+		<p>
+			Note that chroma can actually take negative values (but clamps at 0) and
+			is theoretically unbound. (I've read it should be clamped at 230, but TNG
+			blue says different.)
+		</p>
+		<ColorShowcase
+			colors={[
+				'lch(39.4% -100 264.45)',
+				'lch(39.4% 0 264.45)',
+				'lch(39.4% 43.21 264.45)',
+				'lch(39.4% 43.21 264.45)',
+				'lch(39.4% 100 264.45)',
+				'lch(39.4% 230 264.45)',
+				'lch(39.4% 300 264.45)',
+				'lch(39.4% 500 264.45)',
+			]}
+		/>
+		<div style="height: 18vh;"></div>
+		<p>
+			Lightness can also exceed 100%, for both LAB and LCH. In fact, it's
+			theoretically unbound, but values over 400% should not have any impact on
+			any screen:
+		</p>
+
+		<ColorShowcase
+			colors={[
+				'lab(50% -3 34)',
+				'lab(100% -3 34)',
+				'lab(150% -3 34)',
+				'lab(200% -3 34)',
+				'lch(300% 43.21 264.45)',
+				'lab(400% -2 34)',
+			]}
+		/>
+		<div style="height: 18vh;"></div>
+		<p>
+			As an aside: I was only able to replicate this on my Mac's actual screen,
+			not on the TNG standard Dells and probably neither on Zoom nor on the
+			projector. But <code>HSL</code> seems to muddle gradients a bit, at least compared
+			to <code>LCH</code>:
+		</p>
+		<ColorBlock
+			color="linear-gradient(to right, hsl(188 100% 34%), hsl(331 100% 50%))"
+			ratio="5 / 1 "
+		/>
+		<ColorBlock
+			color="linear-gradient(to right, lch(50% 100 200), lch(50% 100 0))"
+			ratio="5 / 1"
+		/>
+
+		<figure>
+			<img
+				src="https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/72ba74de-3574-4301-ab9c-03b37c52acf6/6-modern-css-color.png"
+			/>
+			<figcaption>
+				The image by Michelle Barker, taken from <a
+					href="https://www.smashingmagazine.com/2021/11/guide-modern-css-colors/"
+					>her excellent blog post</a
+				>.
+			</figcaption>
+		</figure>
+	</main>
+</Layout>

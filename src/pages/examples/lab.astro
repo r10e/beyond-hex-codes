@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'The CIE Colour Space: LAB';
+export const number = '07';
+export const abstract = `Bigger gamut, perceptually uniform, and already in use by Photoshop.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			The <a href="https://en.wikipedia.org/wiki/CIELAB_color_space"
+				>CIELAB Colour Space</a
+			>
+			is a colour space that spans the whole gamut visible to humans and aims to
+			be perceptually uniform as well as device-independent.
+		</p>
+		<p>
+			<em>Perceptually uniform</em> means that, to the human eye, any colours of
+			the same specified lightness will be perceived as similarly light.
+		</p>
+		<p>
+			The <a href="https://www.w3.org/TR/css-color-4/#specifying-lab-lch"
+				>CSS Color Module Level 4</a
+			> includes two ways to define colours within CIELAB: <code>LAB</code> and <code
+				>LCH</code
+			>.
+		</p>
+		<p>
+			LAB is often used in print and defines colour spaces based on
+			<em>Lightness</em>, the <em>A-Axis</em> and the <em>B-Axis</em>, where the
+			A-Axis is takes values between <code>-160</code> and <code>160</code>
+			to choose the value of green vs. red, while the B-Axis takes the same values
+			to differ between blue and yellow:
+		</p>
+		<ColorShowcase
+			colors={[
+				'lab(50% -160 0)',
+				'lab(50% 160 0)',
+				'lab(50% 0 -160)',
+				'lab(50% 0 160)',
+			]}
+		/>
+		<p>
+			Here is a helpful <a href="https://codepen.io/smashingmag/pen/JjywKNK"
+				>LAB colour picker by Michelle Barker</a
+			>.
+		</p>
+		<div style="height: 15vh;"></div>
+		<figure>
+			<img src="https://wisotop.de/svg/lab-farbmodell-einfach.png" /><figcaption
+			>
+				The LAB colours can be thought about navigating the color space with X
+				and Y coordinates. Image source: <a
+					href="https://wisotop.de/lab-farbraum-cie-luv-farbraum.php"
+					>wisotop.de</a
+				>
+			</figcaption>
+		</figure>
+	</main>
+</Layout>

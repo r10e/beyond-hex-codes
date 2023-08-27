@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'The Future: `color-mix`';
+export const number = '10';
+export const abstract = `We can mix colours on the fly.`;
+
+const examples = await Astro.glob('./*.{astro,vue}');
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			This function is introduced in <a
+				href="https://www.w3.org/TR/css-color-5/">CSS Color Module Level 5</a
+			> which currently still is at draft level. The only browser you can (at the
+			moment) use these with is Safari with a turned on feature flag.
+		</p>
+		<p>
+			The function <code>color-mix</code> takes as argument a color space and two
+			colors to be mixed, with optional percentages:
+		</p>
+		<ColorShowcase
+			colors={[
+				'color-mix(in lch, white, black)',
+				'color-mix(in hwb, white, black)',
+				'color-mix(in lab, white, black)',
+				'color-mix(in xyz, white, black)',
+				'color-mix(in srgb, white, black)',
+			]}
+		/>
+		<div style="height: 35vh;"></div>
+		<p>
+			The results differ a bit with grays, but it's even weirder with other
+			colours:
+		</p>
+		<ColorShowcase
+			colors={[
+				'color-mix(in lch, red 30%, blue)',
+				'color-mix(in hwb, red 30%, blue)',
+				'color-mix(in xyz, red 30%, blue)',
+				'color-mix(in lab, red 30%, blue)',
+				'color-mix(in srgb, red 30%, blue)',
+			]}
+		/>
+	</main>
+</Layout>
+
+<style>
+	.showcase {
+		background-color: hotpink;
+	}
+</style>

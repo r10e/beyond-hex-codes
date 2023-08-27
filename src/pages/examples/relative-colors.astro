@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'The Future: Relative Colours';
+export const number = '12';
+export const abstract = `Create colour relative to a given one.`;
+
+const examples = await Astro.glob('./*.{astro,vue}');
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			This function is introduced in <a
+				href="https://www.w3.org/TR/css-color-5/#relative-colors"
+				>CSS Color Module Level 5: Relative Colors</a
+			> which currently still is at draft level. The only browser to support this
+			is the Safari Tech Preview, and even there with a feature flag.
+		</p>
+		<p>
+			We will be able to take any colour in any syntax and use its values to
+			compute a new one. Here's the syntax for today's colour schemes that keeps
+			the colours the same:
+		</p>
+		<pre>rgb(from COLOUR r g b)
+hsl(from COLOUR h s l)
+hwb(from COLOUR h w b)
+lab(from COLOUR l a b)
+lch(from COLOUR l c h)
+</pre>
+		<div style="height: 50vh;"></div>
+		<p>
+			This enables us to modify a colour to our liking. Maybe our blue should be
+			only half as blue, or we want to add some red, or switch our colours
+			completely:
+		</p>
+		<ColorShowcase
+			colors={[
+				'rgb(from blue r g b)',
+				'rgb(from blue r g calc(b / 2))',
+				'rgb(from blue calc(r + 50%) g b)',
+				'rgb(from blue g b r)',
+				'rgb(from blue b b b)',
+			]}
+		/>
+		<p>
+			With more semantic definitions, we can more simply turn down saturation or
+			turn the colour wheel:
+		</p>
+		<ColorShowcase
+			colors={[
+				'hsl(from hotpink h s l)',
+				'hsl(from hotpink h calc(s / 2) l)',
+				'hsl(from hotpink calc(h + .5turn) s l)',
+			]}
+		/>
+		<p>
+			We can also modify the opacity, put in any kind of colour and, at least
+			for lch, even do the mistake of switching up chroma and lightness!
+		</p>
+		<ColorShowcase
+			colors={[
+				'lch(from rebeccapurple l c h)',
+				'lch(from rebeccapurple l c h / calc(alpha / 2))',
+				'lch(from #e1312f l 500 calc(h + 25turn))',
+				'lch(from #e1312f c l calc(h + 14rad))',
+			]}
+		/>
+	</main>
+</Layout>
+
+<style>
+	.showcase {
+		background-color: hotpink;
+	}
+</style>

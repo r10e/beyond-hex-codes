@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import allColorsObject from '../../../node_modules/css-color-names/css-color-names.json';
+
+export const title = 'Named Colours';
+export const number = '01';
+export const abstract = `The easiest thing that could possibly work: Just write the name of a colour.`;
+
+const exampleColors = [
+	'red',
+	'green',
+	'blue',
+	'rebeccapurple',
+	'hotpink',
+	'lightgoldenrodyellow',
+	'transparent',
+	'currentcolor',
+];
+const allColors = Object.keys(allColorsObject);
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			There are quite a colors that are given a simple string name to use in
+			your CSS.
+		</p>
+		<p>
+			Here are a few <code>divs</code> that use
+			<code>background-color: &lt;THE SHOWN COLOUR&gt;</code> in their style:
+		</p>
+		<ColorShowcase colors={exampleColors} />
+		<p>
+			Two of these are not colours, but keywords instead: <code
+				>transparent</code
+			> defines a fully transparent color and
+			<code>current-color</code> is a way to refer to the currently defined text
+			colour.
+		</p>
+		<p>
+			The following list of
+			{allColors.length}
+			colours is generated from the
+			<a href="https://github.com/bahamas10/css-color-names/"
+				>NPM package
+				<code>css-color-names</code>
+			</a> which provides a JSON with names and their hex codes (which we don't use
+			here).
+		</p>
+		<ColorShowcase colors={allColors} />
+	</main>
+</Layout>
+
+<style></style>

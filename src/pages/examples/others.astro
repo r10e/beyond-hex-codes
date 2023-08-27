@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'Others and the `color` keyword ';
+export const number = '09';
+export const abstract = `There are all kinds of other colour definitions, at least on Safari.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			There are other definitions based on other standards. Here's a few
+			examples, more can be found on <a
+				href="https://codepen.io/argyleink/pen/RwyOyeq"
+				>Adam Argyle's CSS Color Syntax Mega List</a
+			>, but I don't know if he claims any kind of completeness.
+		</p>
+
+		<ColorShowcase
+			client:visible
+			colors={[
+				'oklch(64% .1 233deg)',
+				'oklab(64% -.1 -.1)',
+				'color(xyz .22 .26 .53)',
+				'color(srgb-linear .05 .3 .52)',
+				'color(display-p3 .34 .58 .73)',
+				'color(rec2020 .34 .58 .73)',
+				'color(a98-rgb 34% 58% 73%)',
+				'color(prophoto-rgb 34% 58% 73%)',
+				'color(xyz-d50 .22 .26 .53)',
+				'color(xyz-d65 .22 .26 .53)',
+				'color(prophoto-rgb)',
+				'color(display-p3)',
+				'color(xyz-d65 none none none)',
+			]}
+		/>
+		<p>
+			Note that many of these don't have their 'own' function so to say, but
+			rather use the <code>color()</code> function with the color space as first
+			argument.
+		</p>
+	</main>
+</Layout>
+
+<style>
+	.showcase {
+		background-color: hotpink;
+	}
+</style>

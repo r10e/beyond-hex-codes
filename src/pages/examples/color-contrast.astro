@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ColorShowcase from '../../components/ColorShowcase.astro';
+
+export const title = 'The Future: `color-contrast`';
+export const number = '11';
+export const abstract = `Auto-choose the right color for perfect accessibility.`;
+
+const examples = await Astro.glob('./*.{astro,vue}');
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			This function is introduced in <a
+				href="https://www.w3.org/TR/css-color-5/">CSS Color Module Level 5</a
+			> which currently still is at draft level. The only browser you can (at the
+			moment) use these with is Safari with a turned on feature flag.
+		</p>
+		<p>
+			The function <code>color-contrast</code> takes a color and a list of colours,
+			of which the one with the highest contrast will be chosen.
+		</p>
+		<ColorShowcase
+			backgroundColor="hotpink"
+			client:visible
+			colors={[
+				'color-contrast(hotpink vs white, black)',
+				'color-contrast(hotpink vs red, green)',
+				'color-contrast(hotpink vs blue, darkgoldenrod)',
+				'color-contrast(hotpink vs darkgoldenrod, blue)',
+				'color-contrast(hotpink vs orange, lightgoldenrodyellow, black)',
+				'color-contrast(hotpink vs orange, lightgoldenrodyellow, green)',
+			]}
+		/>
+		<div style="height: 15vh;"></div>
+		<p>
+			It can also specify the contrast level according to the <a
+				href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+				>WCAG guidelines</a
+			> (to my knowlege <code>AA</code> and <code>AAA</code>) that should be
+			met, and then will choose the first matching colour of the list, or black
+			or white if we don't find a colour that meets the specificaton.
+		</p>
+		<p>As this function is still in specificaton, this may change yet.</p>
+		<ColorShowcase
+			backgroundColor="black"
+			client:visible
+			colors={[
+				'color-contrast(black vs blue, darkgoldenrod, lightgoldenrodyellow, white)',
+				'color-contrast(black vs blue, darkgoldenrod, lightgoldenrodyellow, white to AA)',
+				'color-contrast(black vs blue, darkgoldenrod, lightgoldenrodyellow, white to AAA)',
+				'color-contrast(black vs blue, darkblue, purple)',
+				'color-contrast(black vs blue, darkblue, purple to AA)',
+			]}
+		/>
+	</main>
+</Layout>
+
+<style>
+	.showcase {
+		background-color: hotpink;
+	}
+</style>

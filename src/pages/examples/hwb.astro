@@ -1,0 +1,59 @@
+---
+import ColorShowcase from '../../components/ColorShowcase.astro';
+import Layout from '../../layouts/Layout.astro';
+
+export const title = 'HWB: Hue, Whiteness, Blackness';
+export const number = '04';
+export const abstract = `Another way to think about colours, featuring hue.`;
+
+const examples = (await Astro.glob('./*.{astro,vue}')).sort(
+	(a, b) => a.number - b.number,
+);
+
+const ownNumber = parseInt(number);
+
+const previousExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber - 1,
+);
+const previous = previousExample
+	? { title: previousExample.title, url: previousExample.url }
+	: null;
+const nextExample = examples.find(
+	(example) => parseInt(example.number) === ownNumber + 1,
+);
+const next = nextExample
+	? { title: nextExample.title, url: nextExample.url }
+	: null;
+---
+
+<Layout
+	title={title}
+	number={number}
+	abstract={abstract}
+	previous={previous}
+	next={next}
+>
+	<main class="box">
+		<p>
+			HWB is another way to think about colours. Here, <em>Hue</em> is the same as
+			in HSL, but <em>W</em> stands for <em>Whiteness</em> and <em>B</em> for <em
+				>Blackness.</em
+			>
+		</p>
+		<ColorShowcase
+			colors={[
+				'hwb(205 0% 0%)',
+				'hwb(205 2% 36%)',
+				'hwb(205 100% 0%)',
+				'hwb(205 0% 100%)',
+				'hwb(205 100% 100%)',
+			]}
+		/>
+		<p>
+			<a
+				href="https://www.stefanjudis.com/blog/hwb-a-color-notation-for-humans/"
+				>This article by Stefan Judis</a
+			> gives a good overview on HWB including a colour picker.
+		</p>
+	</main>
+</Layout>
